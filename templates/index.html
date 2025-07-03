@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Вопрос</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="scene">
+    <div class="block">
+      <div class="card">
+        {{ question | safe }}
+      </div>
+    </div>
+  </div>
+
+  {% if not ended %}
+    <div class="nav">
+      <a href="/question/{{ next_id }}?score={{ score }}&correct=true&log={{ log }}" class="btn">Правда</a>
+      <a href="/question/{{ next_id }}?score={{ score }}&correct=false&log={{ log }}" class="btn">Ложь</a>
+    </div>
+  {% else %}
+    <div class="nav">
+      <a href="/" class="btn">← Пройти заново</a>
+      <a href="/add" class="btn">📤 Добавить свои вопросы</a>
+    </div>
+
+    <div class="results-box">
+      <h3>Результаты:</h3>
+      <ul class="results-list">
+        {% for item in history %}
+          <li class="{{ 'correct' if item.is_correct else 'wrong' }}">
+            <span class="question">{{ item.question }}</span>
+            {% if item.is_correct %}
+              <span class="result-icon">✅</span>
+            {% else %}
+              <span class="result-icon">❌</span>
+              <span class="user-answer">(Вы выбрали: {{ "Правда" if item.your_answer else "Ложь" }})</span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+</body>
+</html>
